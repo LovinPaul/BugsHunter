@@ -34,7 +34,7 @@ public class MainMenu implements Screen,PageListener{
         this.main = main;
 
         page = new MainPage(c, this);
-        background = BitmapFactory.decodeResource(c.getResources(), R.drawable.html_1);
+        background = BitmapFactory.decodeResource(c.getResources(), R.drawable.code_2);
     }
 
 
@@ -54,9 +54,6 @@ public class MainMenu implements Screen,PageListener{
     @Override
     public void loadPage(int loadPage) {
         switch (loadPage){
-            case -1:
-                System.out.println("Quit Game Here.");
-                break;
             case 0:
                 main.makeNewGame();
                 System.out.println("New Game Starts Here.");

@@ -17,8 +17,11 @@ public class Button extends Comp{
 
     private Paint mPaint;
 
-    public Button(Context c, int newGameButton){
+    private byte id;
+
+    public Button(Context c, byte id){
         super(c);
+        this.id=id;
 
         // and we set a new Paint with the desired attributes
         mPaint = new Paint();
@@ -28,7 +31,7 @@ public class Button extends Comp{
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeWidth(4f);
 
-        switch (newGameButton){
+        switch (id){
             case 0:
                 normalButton = BitmapFactory.decodeResource(c.getResources(), R.drawable.new_game);
                 break;
@@ -38,9 +41,6 @@ public class Button extends Comp{
             case 2:
                 normalButton = BitmapFactory.decodeResource(c.getResources(), R.drawable.help);
                 break;
-            case 3:
-                normalButton = BitmapFactory.decodeResource(c.getResources(), R.drawable.quit);
-                break;
         }
 
 
@@ -49,14 +49,14 @@ public class Button extends Comp{
     }
 
 
+    public byte getID(){
+        return id;
+    }
 
     public void draw(Canvas canvas){
         if(isVisible){
-            //canvas.rotate(270, x+width/2,y+height/2);
             canvas.drawBitmap(normalButton,x,y,null);
             canvas.drawRect(x,y,x+width,y+height,mPaint);
-            //canvas.rotate(0);
-
         }
     }
 

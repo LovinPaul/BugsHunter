@@ -11,11 +11,7 @@ import java.util.ArrayList;
 public class MainPage implements Page{
 
     private ArrayList<Button> buttons;
-
-    private Button newGameButton;
-    private Button highScore;
-    private Button helpButton;
-    private Button quitButton;
+    private Button newButton;
 
     private PageListener pageListener;
 
@@ -25,25 +21,14 @@ public class MainPage implements Page{
 
         buttons = new ArrayList<>();
 
-        newGameButton = new Button(c,0);
-        newGameButton.setX(50);
-        newGameButton.setY(50);
-        buttons.add(newGameButton);
+        newButton = new Button(c,(byte)0);
+        buttons.add(newButton);
 
-        highScore = new Button(c,1);
-        highScore.setX(50);
-        highScore.setY(114);
-        buttons.add(highScore);
+        newButton = new Button(c,(byte)1);
+        buttons.add(newButton);
 
-        helpButton = new Button(c,2);
-        helpButton.setX(50);
-        helpButton.setY(178);
-        buttons.add(helpButton);
-
-        quitButton = new Button(c,3);
-        quitButton.setX(50);
-        quitButton.setY(242);
-        buttons.add(quitButton);
+        newButton = new Button(c,(byte)2);
+        buttons.add(newButton);
     }
 
 
@@ -51,18 +36,23 @@ public class MainPage implements Page{
     public void touch(MotionEvent event){
 
         if(event.getAction() == MotionEvent.ACTION_UP){
-            if(newGameButton.contains(event.getX(), event.getY())){
-                //newGameButton.setIsVisible(false);
-                pageListener.loadPage(0);
-            }else if(highScore.contains(event.getX(), event.getY())) {
-                //highScore.setIsVisible(false);
-                pageListener.loadPage(2);
-            }else if(helpButton.contains(event.getX(), event.getY())) {
-                //helpButton.setIsVisible(false);
-                pageListener.loadPage(3);
-            }else if(quitButton.contains(event.getX(), event.getY())) {
-                //quitButton.setIsVisible(false);
-                pageListener.loadPage(-1);
+
+            for(Button button : buttons){
+
+                if(button.contains(event.getX(), event.getY())){
+                    switch (button.getID()){
+                        case 0:
+                            pageListener.loadPage(0);
+                            break;
+                        case 1:
+                            pageListener.loadPage(2);
+                            break;
+                        case 2:
+                            pageListener.loadPage(3);
+                            break;
+                    }
+                }
+
             }
         }
 
@@ -71,24 +61,18 @@ public class MainPage implements Page{
 
     @Override
     public void draw(Canvas canvas) {
-//        newGameButton.draw(canvas);
-//        highScore.draw(canvas);
-//        helpButton.draw(canvas);
-//        quitButton.draw(canvas);
-
 
         int i=0;
         int x=(canvas.getWidth()/2)-(buttons.get(0).getWidth()/2);
         int y;
-        for(Button singleplayerButton : buttons){
+        for(Button button : buttons){
 
             y=(canvas.getHeight()/2)+(100*(i-buttons.size()/2));
-            singleplayerButton.setX(x);
-            singleplayerButton.setY(y);
-            singleplayerButton.draw(canvas);
+            button.setX(x);
+            button.setY(y);
+            button.draw(canvas);
             i++;
         }
-
 
     }
 

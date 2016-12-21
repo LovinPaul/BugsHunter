@@ -9,7 +9,7 @@ public class HTML1 extends Map {
 
     public HTML1(Context c){
 
-        background = BitmapFactory.decodeResource(c.getResources(), R.drawable.html_1);
+        background = BitmapFactory.decodeResource(c.getResources(), R.drawable.code_2);
     }
 
 }
