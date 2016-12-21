@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import com.bugshunter.Game.Actors.Actor;
+import com.bugshunter.Game.Actors.Bugs.SimpleBug;
 import com.bugshunter.Game.Actors.Snake.SnakeActor;
 import com.bugshunter.Game.Map.HTML1;
 import com.bugshunter.Game.Map.Map;
@@ -22,12 +23,12 @@ public abstract class Game implements Screen {
 
     protected boolean pause;
 
-    private float touchDownX=-1;
-    private float touchDownY=-1;
+    private float touchDownX;
+    private float touchDownY;
     private float touchMoveX=-1;
     private float touchMoveY=-1;
-    private float touchUpX=-1;
-    private float touchUpY=-1;
+    private float touchUpX;
+    private float touchUpY;
 
 
     Paint mPaint;
@@ -36,6 +37,7 @@ public abstract class Game implements Screen {
         actors = new ArrayList<>();
         me = new SnakeActor(50,50);
         actors.add(me);
+        actors.add(new SimpleBug(c,100,100));
 
         map = new HTML1(c);
 
@@ -66,13 +68,8 @@ public abstract class Game implements Screen {
     public void touch(MotionEvent event) {
 
         if(pause){pause=false;}
-//        me.setAngle((int) calculateNewAngle(me.getX(), me.getY(),event.getX(),event.getY()));
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touchUpX=-1;
-                touchUpY=-1;
-                touchUpX=event.getX();
-                touchUpY=event.getY();
                 touchDownX=event.getX();
                 touchDownY=event.getY();
                 break;
@@ -85,13 +82,8 @@ public abstract class Game implements Screen {
                 touchUpY=event.getY();
                 me.setAngle((int) calculateNewAngle(touchDownX,touchDownY,touchUpX,touchUpY));
 
-                touchDownX=-1;
-                touchDownY=-1;
                 touchMoveX=-1;
                 touchMoveY=-1;
-                touchUpX=-1;
-                touchUpY=-1;
-
                 break;
         }
 
@@ -117,23 +109,9 @@ public abstract class Game implements Screen {
             actor.draw(canvas);
         }
 
-
-//        if(touchDownX>0 || touchDownY>0){
-////            if(touchUpX>0){
-////                //canvas.drawLine(touchDownX,touchDownY,touchUpX,touchUpY,mPaint);
-////            }else
-//            if(touchMoveX>0 || touchMoveY>0){
-////                if(Math.abs(touchDownX-touchMoveX)>10 || Math.abs(touchDownY-touchMoveY)>10) {
-//                    canvas.drawLine(touchDownX,touchDownY,touchMoveX,touchMoveY,mPaint);
-////                }
-//            }
-
-
-//        }
-
-
-
-
+        if(touchMoveX>0){
+            canvas.drawLine(touchDownX,touchDownY,touchMoveX,touchMoveY,mPaint);
+        }
     }
 
 }

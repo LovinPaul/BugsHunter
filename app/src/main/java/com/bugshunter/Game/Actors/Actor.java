@@ -8,6 +8,9 @@ public abstract class Actor {
     protected float y;
     protected int angle=90;
 
+    protected int canvasWidth;
+    protected int canvasHeight;
+
     protected float newX;
     protected float newY;
 
@@ -32,6 +35,8 @@ public abstract class Actor {
 
 
     public void draw(Canvas canvas){
+        canvasWidth = canvas.getWidth();
+        canvasHeight = canvas.getHeight();
 
     }
 

@@ -12,8 +12,10 @@ import java.util.ArrayList;
 public class SnakeActor extends Actor {
 
     private int lenght=15;
-    private int thickness=15;
+    private int thickness=35;
     private ArrayList<BodyPart> snakeBodyParts;
+
+
 
     public SnakeActor(float x, float y){
 
@@ -34,6 +36,17 @@ public class SnakeActor extends Actor {
         x = (float) (x - agility*Math.cos(Math.toRadians(angle+90)));
         y = (float) (y - agility*Math.sin(Math.toRadians(angle+90)));
 
+        if(x<0){
+            x=canvasWidth;
+        }else if(x>canvasWidth){
+            x=0;
+        }
+        if(y<0){
+            y=canvasHeight;
+        }else if(y>canvasHeight){
+            y=0;
+        }
+
         for(int i=snakeBodyParts.size()-1; i>0; i--){
             snakeBodyParts.get(i).x = snakeBodyParts.get(i-1).x;
             snakeBodyParts.get(i).y = snakeBodyParts.get(i-1).y;
@@ -44,6 +57,7 @@ public class SnakeActor extends Actor {
     }
 
     public void draw(Canvas canvas){
+        super.draw(canvas);
         for (BodyPart part : snakeBodyParts){
             part.draw(canvas);
         }
