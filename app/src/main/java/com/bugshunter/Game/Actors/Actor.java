@@ -15,10 +15,26 @@ public abstract class Actor {
     protected float newY;
 
     protected float agility;
+    protected int maneuverability;
 
     public void setAngle(int angle){
         if(angle>=0 && angle<360){
             this.angle=angle;
+        }
+    }
+
+    public boolean isNewAngleValid(int angle){
+        if(angle>=0 && angle<360){
+            int phi = Math.abs(this.angle-angle);
+            int newAngle = phi > 180 ? 360 - phi : phi;
+
+            if(newAngle<maneuverability){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
         }
     }
 

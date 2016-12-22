@@ -76,6 +76,13 @@ public abstract class Game implements Screen {
             case MotionEvent.ACTION_MOVE:
                 touchMoveX=event.getX();
                 touchMoveY=event.getY();
+
+                if(me.isNewAngleValid((int) calculateNewAngle(touchDownX,touchDownY,touchMoveX,touchMoveY))){
+                    mPaint.setColor(Color.GREEN);
+                }else{
+                    mPaint.setColor(Color.RED);
+                }
+
                 break;
             case MotionEvent.ACTION_UP:
                 touchUpX=event.getX();

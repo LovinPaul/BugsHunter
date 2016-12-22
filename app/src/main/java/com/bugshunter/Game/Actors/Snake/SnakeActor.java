@@ -11,8 +11,9 @@ import java.util.ArrayList;
 
 public class SnakeActor extends Actor {
 
+
     private int lenght=15;
-    private int thickness=35;
+    private int thickness=15;
     private ArrayList<BodyPart> snakeBodyParts;
 
 
@@ -23,6 +24,7 @@ public class SnakeActor extends Actor {
         this.y = y;
 
         agility=thickness;
+        maneuverability=120;
 
         snakeBodyParts = new ArrayList<>();
 
@@ -31,6 +33,15 @@ public class SnakeActor extends Actor {
         }
 
     }
+
+    @Override
+    public void setAngle(int angle) {
+        if(isNewAngleValid(angle)){
+            this.angle=angle;
+        }
+    }
+
+
 
     public void moveForward(){
         x = (float) (x - agility*Math.cos(Math.toRadians(angle+90)));
