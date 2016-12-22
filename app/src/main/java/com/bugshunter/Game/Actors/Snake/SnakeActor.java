@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SnakeActor extends Actor {
 
 
-    private int lenght=15;
+    private int lenght=3;
     private int thickness=15;
     private ArrayList<BodyPart> snakeBodyParts;
 
@@ -29,7 +29,7 @@ public class SnakeActor extends Actor {
         snakeBodyParts = new ArrayList<>();
 
         for (int i=0; i<lenght; i++){
-            snakeBodyParts.add(new BodyPart(x, y+(i*thickness)));
+            snakeBodyParts.add(new BodyPart(x, y));//+(i*thickness)
         }
 
     }
@@ -41,7 +41,14 @@ public class SnakeActor extends Actor {
         }
     }
 
+    public void addBodyPart(){
+        snakeBodyParts.add(new BodyPart(x, y));
+    }
+    public boolean headContains(float x, float y){
 
+        return snakeBodyParts.get(0).contains(x,y);
+
+    }
 
     public void moveForward(){
         x = (float) (x - agility*Math.cos(Math.toRadians(angle-180)));
@@ -80,11 +87,12 @@ public class SnakeActor extends Actor {
         float y;
 
         private Paint mPaint;
-
+        private int bodyThickness;
 
         public BodyPart(float x, float y){
             this.x = x;
             this.y = y;
+            bodyThickness = thickness;
 
             // and we set a new Paint with the desired attributes
             mPaint = new Paint();
@@ -94,6 +102,15 @@ public class SnakeActor extends Actor {
             mPaint.setStrokeJoin(Paint.Join.ROUND);
             mPaint.setStrokeWidth(4f);
 
+        }
+
+        public boolean contains(float x, float y){
+            float dist = (float)(Math.abs(this.x - x) + Math.abs(this.y - y));
+            if(dist<bodyThickness){
+                return true;
+            }else{
+                return false;
+            }
         }
 
         public void draw(Canvas canvas){

@@ -17,10 +17,15 @@ public abstract class Actor {
     protected float agility;
     protected int maneuverability;
 
+    protected boolean isAlive=true;
+
     public void setAngle(int angle){
         if(angle>=0 && angle<360){
             this.angle=angle;
         }
+    }
+    public void setIsAlive(boolean isAlive){
+        this.isAlive = isAlive;
     }
 
     public boolean isNewAngleValid(int angle){
@@ -51,6 +56,12 @@ public abstract class Actor {
     public void moveForward(){
 //        newX = (float) (x - agility*Math.cos(Math.toRadians(angle+90)));
 //        newY = (float) (y - agility*Math.sin(Math.toRadians(angle+90)));
+    }
+
+
+
+    public boolean isAlive(){
+        return isAlive;
     }
 
 

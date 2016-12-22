@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 
 import com.bugshunter.Game.Actors.Actor;
+import com.bugshunter.Game.Actors.Bugs.BugActor;
 import com.bugshunter.Game.Actors.Bugs.SimpleBug;
 import com.bugshunter.Game.Actors.Snake.SnakeActor;
 import com.bugshunter.Game.Map.HTML1;
@@ -75,6 +76,7 @@ public abstract class Game implements Screen {
     @Override
     public void updateMechanics() {
         if(!pause){
+            handleColisionWithBugs((SnakeActor) me);
             for(Actor actor : actors){
                 actor.moveForward();
             }
@@ -105,6 +107,18 @@ public abstract class Game implements Screen {
                 touchMoveX=-1;
                 touchMoveY=-1;
                 break;
+        }
+
+    }
+
+    protected void handleColisionWithBugs(SnakeActor snakeActor){
+
+        for(Actor actor : actors){
+            if((actor instanceof BugActor)&&(snakeActor.headContains(actor.getX(), actor.getY()))){
+                actor.setIsAlive(false);
+                snakeActor.addBodyPart();
+                System.out.println("Body part added");
+            }
         }
 
     }
