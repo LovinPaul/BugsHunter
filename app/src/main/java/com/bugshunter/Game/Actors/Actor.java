@@ -44,6 +44,10 @@ public abstract class Actor {
     public float getY(){
         return  y;
     }
+    public int getAngle(){
+        return angle;
+    }
+
     public void moveForward(){
 //        newX = (float) (x - agility*Math.cos(Math.toRadians(angle+90)));
 //        newY = (float) (y - agility*Math.sin(Math.toRadians(angle+90)));

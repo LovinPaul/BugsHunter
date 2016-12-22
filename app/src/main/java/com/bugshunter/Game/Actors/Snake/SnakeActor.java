@@ -44,8 +44,8 @@ public class SnakeActor extends Actor {
 
 
     public void moveForward(){
-        x = (float) (x - agility*Math.cos(Math.toRadians(angle+90)));
-        y = (float) (y - agility*Math.sin(Math.toRadians(angle+90)));
+        x = (float) (x - agility*Math.cos(Math.toRadians(angle-180)));
+        y = (float) (y - agility*Math.sin(Math.toRadians(angle-180)));
 
         if(x<0){
             x=canvasWidth;
