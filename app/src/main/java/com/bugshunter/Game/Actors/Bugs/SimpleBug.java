@@ -19,7 +19,7 @@ public class SimpleBug extends BugActor{
     }
 
     public void draw(Canvas canvas){
-            canvas.drawBitmap(img,x,y,null);
+            canvas.drawBitmap(img,x-img.getWidth()/2,y-img.getHeight()/2,null);
     }
 
 }

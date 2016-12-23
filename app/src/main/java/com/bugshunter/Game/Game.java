@@ -17,15 +17,20 @@ import com.bugshunter.Screen;
 import com.bugshunter.UI.InGame.Rime;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class Game implements Screen {
 
-    private ArrayList<Actor> actors;
+    //private ArrayList<Actor> actors;
+    private ArrayList<BugActor> bugActors;
+
     protected Actor me;
     protected Map map;
     protected Rime rimeUI;
+    protected Context c;
 
     protected boolean pause;
+    protected int nrMaxOfBugs = 10;
 
     private float touchDownX;
     private float touchDownY;
@@ -34,6 +39,8 @@ public abstract class Game implements Screen {
     private float touchUpX;
     private float touchUpY;
 
+    protected int width;
+    protected int height;
 
     Paint mPaint;
 
@@ -50,10 +57,13 @@ public abstract class Game implements Screen {
     }
 
     public Game(Context c) {
-        actors = new ArrayList<>();
+        this.c = c;
+        //actors = new ArrayList<>();
         me = new SnakeActor(50,50);
-        actors.add(me);
-        actors.add(new SimpleBug(c,100,100));
+        //actors.add(me);
+
+        bugActors = new ArrayList<>();
+
 
         rimeUI = new Rime(me);
 
@@ -77,7 +87,9 @@ public abstract class Game implements Screen {
     public void updateMechanics() {
         if(!pause){
             handleColisionWithBugs((SnakeActor) me);
-            for(Actor actor : actors){
+            handleBugs();
+            me.moveForward();
+            for(Actor actor : bugActors){
                 actor.moveForward();
             }
         }
@@ -113,7 +125,7 @@ public abstract class Game implements Screen {
 
     protected void handleColisionWithBugs(SnakeActor snakeActor){
 
-        for(Actor actor : actors){
+        for(Actor actor : bugActors){
             if((actor instanceof BugActor)&&(snakeActor.headContains(actor.getX(), actor.getY()))){
                 actor.setIsAlive(false);
                 snakeActor.addBodyPart();
@@ -122,23 +134,42 @@ public abstract class Game implements Screen {
         }
 
     }
+    protected void handleBugs(){
 
+        Iterator<BugActor> bugActorIterator = bugActors.iterator();
+        while (bugActorIterator.hasNext()){
+            BugActor bugActor = bugActorIterator.next();
+            if (!bugActor.isAlive()){
+                bugActorIterator.remove();
+            }
+        }
+
+        if(bugActors.size()<=10){
+            bugActors.add(new SimpleBug(c, (float) (Math.random()*width),(float) (Math.random()*height)));
+        }
+
+    }
 
 
     @Override
     public void draw(Canvas canvas) {
+        width = canvas.getWidth();
+        height = canvas.getHeight();
+
         map.draw(canvas);
 
-        for(Actor actor : actors){
+        for(Actor actor : bugActors){
             actor.draw(canvas);
         }
+
+        me.draw(canvas);
 
         if(touchMoveX>0){
             rimeUI.setTouchInput(touchDownX,touchDownY,touchMoveX,touchMoveY);
             rimeUI.draw(canvas);
         }
 
-        canvas.drawText(me.getAngle()+"", 50,50,mPaint);
+        canvas.drawText(bugActors.size()+"", 50,50,mPaint);
 
     }
 
