@@ -29,7 +29,7 @@ public class SnakeActor extends Actor {
         snakeBodyParts = new ArrayList<>();
 
         for (int i=0; i<lenght; i++){
-            snakeBodyParts.add(new BodyPart(x, y));//+(i*thickness)
+            snakeBodyParts.add(new BodyPart(x, y+(i*thickness)));//
         }
 
     }
@@ -42,6 +42,9 @@ public class SnakeActor extends Actor {
     }
 
     public void addBodyPart(){
+        snakeBodyParts.add(new BodyPart(x, y));
+        snakeBodyParts.add(new BodyPart(x, y));
+        snakeBodyParts.add(new BodyPart(x, y));
         snakeBodyParts.add(new BodyPart(x, y));
     }
     public boolean headContains(float x, float y){
@@ -72,6 +75,14 @@ public class SnakeActor extends Actor {
 
         snakeBodyParts.get(0).x = x;
         snakeBodyParts.get(0).y = y;
+    }
+
+    public void checkForSelfColision(){
+        for(int i=2; i<snakeBodyParts.size(); i++){
+            if(snakeBodyParts.get(0).contains(snakeBodyParts.get(i).x,snakeBodyParts.get(i).y)){
+                isAlive=false;
+            }
+        }
     }
 
     public void draw(Canvas canvas){

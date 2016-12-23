@@ -76,6 +76,7 @@ public abstract class Game implements Screen {
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         //mPaint.setStrokeWidth(4f);
         mPaint.setStrokeWidth(1f);
+        mPaint.setTextSize(50);
     }
 
     @Override
@@ -85,13 +86,14 @@ public abstract class Game implements Screen {
 
     @Override
     public void updateMechanics() {
-        if(!pause){
+        if(!pause && me.isAlive()){
             handleColisionWithBugs((SnakeActor) me);
             handleBugs();
             me.moveForward();
             for(Actor actor : bugActors){
                 actor.moveForward();
             }
+            ((SnakeActor) me).checkForSelfColision();
         }
     }
 
@@ -151,22 +153,28 @@ public abstract class Game implements Screen {
     }
 
 
+
     @Override
     public void draw(Canvas canvas) {
         width = canvas.getWidth();
         height = canvas.getHeight();
 
         map.draw(canvas);
-
-        for(Actor actor : bugActors){
+        for (Actor actor : bugActors) {
             actor.draw(canvas);
         }
 
         me.draw(canvas);
 
-        if(touchMoveX>0){
-            rimeUI.setTouchInput(touchDownX,touchDownY,touchMoveX,touchMoveY);
-            rimeUI.draw(canvas);
+
+        if (me.isAlive()) {
+            if (touchMoveX > 0) {
+                rimeUI.setTouchInput(touchDownX, touchDownY, touchMoveX, touchMoveY);
+                rimeUI.draw(canvas);
+            }
+        }else{
+            canvas.drawText("Game Over", width/2,height/2,mPaint);
+            canvas.drawText("Game Over", width/2 -2,height/2 -2,mPaint);
         }
 
         canvas.drawText(bugActors.size()+"", 50,50,mPaint);
