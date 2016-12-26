@@ -41,11 +41,13 @@ public class SnakeActor extends Actor {
         }
     }
 
-    public void addBodyPart(){
-        snakeBodyParts.add(new BodyPart(x, y));
-        snakeBodyParts.add(new BodyPart(x, y));
-        snakeBodyParts.add(new BodyPart(x, y));
-        snakeBodyParts.add(new BodyPart(x, y));
+    public void addBodyParts(int nrOfParts){
+        float lastBodyPartX = snakeBodyParts.get(snakeBodyParts.size()-1).x;
+        float lastBodyPartY = snakeBodyParts.get(snakeBodyParts.size()-1).y;
+
+        for(int i=0; i<nrOfParts; i++){
+            snakeBodyParts.add(new BodyPart(lastBodyPartX, lastBodyPartY));
+        }
     }
     public boolean headContains(float x, float y){
 
@@ -105,7 +107,7 @@ public class SnakeActor extends Actor {
             this.y = y;
             bodyThickness = thickness;
 
-            // and we set a new Paint with the desired attributes
+
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
             mPaint.setColor(Color.rgb((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));

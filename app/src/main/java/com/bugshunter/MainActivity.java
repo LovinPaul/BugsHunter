@@ -5,7 +5,8 @@ import android.os.Bundle;
 
 public class MainActivity extends Activity {
 
-    private Main main;
+    private MainView main;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +16,8 @@ public class MainActivity extends Activity {
 //        if(savedInstanceState!=null){
 //
 //        }else{
-            main = (Main) findViewById(R.id.signature_canvas);
+
+            main = (MainView) findViewById(R.id.signature_canvas);
 //        }
     }
 

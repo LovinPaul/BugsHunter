@@ -7,11 +7,12 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.bugshunter.Game.Actors.Actor;
+import com.bugshunter.Game.Actors.Snake.SnakeActor;
 import com.bugshunter.Game.Game;
 
 public class Rime {
 
-    Actor me;
+    SnakeActor me;
     Paint mPaint;
     RectF maneuverability;
 
@@ -21,7 +22,7 @@ public class Rime {
     private float touchMoveX;
     private float touchMoveY;
 
-    public Rime(Actor me){
+    public Rime(SnakeActor me){
         this.me = me;
 
         mPaint = new Paint();
@@ -51,7 +52,7 @@ public class Rime {
     public void draw(Canvas canvas) {
         canvas.drawLine(touchDownX,touchDownY,touchMoveX,touchMoveY,mPaint);
         maneuverability.set(touchDownX-50,touchDownY-50, touchDownX+50, touchDownY+50);
-        canvas.drawArc(maneuverability, me.getAngle()-120, 240, true, mPaint);
+        canvas.drawArc(maneuverability, me.getAngle()-me.getManeuverability(), me.getManeuverability()*2, true, mPaint);
     }
 
 

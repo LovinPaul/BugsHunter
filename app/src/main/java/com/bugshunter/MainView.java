@@ -5,31 +5,29 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.bugshunter.Game.Game;
 import com.bugshunter.Game.TestGame;
+import com.bugshunter.HighScore.HighScoreManager;
 import com.bugshunter.UI.MainMenu;
 
-public class Main extends View {
+public class MainView extends View {
 
     private int mData;
 
     private Context c;
     private Screen screen;
+    private HighScoreManager highScoreManager;
 
     private Paint mPaint;
 
-    public Main(Context c, AttributeSet attrs) {
+    public MainView(Context c, AttributeSet attrs) {
         super(c, attrs);
         this.c = c;
-
-        makeNewMainMenu();
 
         // and we set a new Paint with the desired attributes
         mPaint = new Paint();
@@ -39,19 +37,22 @@ public class Main extends View {
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeWidth(4f);
 
+        highScoreManager = new HighScoreManager(c);
+        //highScoreManager.readData();
+
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
 
                 screen.updateMechanics();
-                //Repaint
-                invalidate();
+                invalidate();//Repaint
                 handler.postDelayed(this, 100);
 
             }
         });
 
+        screen = new MainMenu(c, this, highScoreManager);//makeNewMainMenu();
     }
 
     @Override
@@ -64,10 +65,14 @@ public class Main extends View {
         screen.pause();
     }
     public void makeNewGame(){
-        screen = new TestGame(c);
+        screen = new TestGame(c, this);
     }
     public void makeNewMainMenu(){
-        screen = new MainMenu(c, this);
+        if(screen instanceof Game){
+            highScoreManager.parseNewScore("name_string", ((Game)screen).getScore());
+        }
+
+        screen = new MainMenu(c, this, highScoreManager);
     }
 
     @Override

@@ -13,24 +13,29 @@ import com.bugshunter.Game.Actors.Bugs.SimpleBug;
 import com.bugshunter.Game.Actors.Snake.SnakeActor;
 import com.bugshunter.Game.Map.HTML1;
 import com.bugshunter.Game.Map.Map;
+import com.bugshunter.MainView;
 import com.bugshunter.Screen;
 import com.bugshunter.UI.InGame.Rime;
+import com.bugshunter.UI.UIComp.Button;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Game implements Screen {
 
-    //private ArrayList<Actor> actors;
     private ArrayList<BugActor> bugActors;
 
-    protected Actor me;
+    protected Button quit;
+    private MainView main;
+
+    protected SnakeActor me;
     protected Map map;
     protected Rime rimeUI;
     protected Context c;
 
     protected boolean pause;
-    protected int nrMaxOfBugs = 10;
+    protected int nrMaxOfBugs = 1;
+    protected int score;
 
     private float touchDownX;
     private float touchDownY;
@@ -56,27 +61,31 @@ public abstract class Game implements Screen {
         return angle;
     }
 
-    public Game(Context c) {
+    public Game(Context c, MainView mainView) {
         this.c = c;
-        //actors = new ArrayList<>();
-        me = new SnakeActor(50,50);
-        //actors.add(me);
+        main = mainView;
 
+        me = new SnakeActor(50,50);
         bugActors = new ArrayList<>();
 
-
         rimeUI = new Rime(me);
-
         map = new HTML1(c);
+
+        quit = new Button(c,(byte)0);
+        quit.setX(50);
+        quit.setY(50);
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.GREEN);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
-        //mPaint.setStrokeWidth(4f);
         mPaint.setStrokeWidth(1f);
         mPaint.setTextSize(50);
+    }
+
+    public int getScore() {
+        return score;
     }
 
     @Override
@@ -94,6 +103,8 @@ public abstract class Game implements Screen {
                 actor.moveForward();
             }
             ((SnakeActor) me).checkForSelfColision();
+
+
         }
     }
 
@@ -101,6 +112,10 @@ public abstract class Game implements Screen {
     public void touch(MotionEvent event) {
 
         if(pause){pause=false;}
+        if(quit.contains(event.getX(),event.getY())){
+            main.makeNewMainMenu();
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touchDownX=event.getX();
@@ -127,11 +142,12 @@ public abstract class Game implements Screen {
 
     protected void handleColisionWithBugs(SnakeActor snakeActor){
 
-        for(Actor actor : bugActors){
-            if((actor instanceof BugActor)&&(snakeActor.headContains(actor.getX(), actor.getY()))){
+        for(BugActor actor : bugActors){
+            if(snakeActor.headContains(actor.getX(), actor.getY())){
                 actor.setIsAlive(false);
-                snakeActor.addBodyPart();
-                System.out.println("Body part added");
+                snakeActor.addBodyParts(5);
+                score += actor.getBugPoints();
+                System.out.println("New Bug eaten. Body part added");
             }
         }
 
@@ -146,8 +162,12 @@ public abstract class Game implements Screen {
             }
         }
 
-        if(bugActors.size()<=10){
-            bugActors.add(new SimpleBug(c, (float) (Math.random()*width),(float) (Math.random()*height)));
+        if(bugActors.size()<nrMaxOfBugs){
+            if(width>0 && height>0) {
+                float x = (float) (Math.random() * width);
+                float y = (float) (Math.random() * height);
+                bugActors.add(new SimpleBug(c, x, y));
+            }
         }
 
     }
@@ -177,7 +197,9 @@ public abstract class Game implements Screen {
             canvas.drawText("Game Over", width/2 -2,height/2 -2,mPaint);
         }
 
-        canvas.drawText(bugActors.size()+"", 50,50,mPaint);
+        canvas.drawText(score+"", width/2,50,mPaint);
+
+        quit.draw(canvas);
 
     }
 
